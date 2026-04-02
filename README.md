@@ -1,6 +1,10 @@
 # Laravel AI + Langfuse Integration Examples
 
-Nine artisan command examples showing how to integrate [Laravel AI](https://laravel.com/docs/ai) with [laravel-langfuse](https://github.com/axyr/laravel-langfuse) for LLM observability. From zero-config auto-tracing to complex multi-agent pipelines with scoring.
+How do you know your LLM calls actually work? What's the latency? The cost? Are the answers any good?
+
+You need observability. [Langfuse](https://langfuse.com) gives you that. [laravel-langfuse](https://github.com/axyr/laravel-langfuse) makes it work with Laravel. And [Laravel AI](https://laravel.com/docs/ai) is Laravel's first-party SDK for calling LLMs.
+
+This repo has 9 artisan commands that show how these pieces fit together. From zero-config auto-tracing to multi-agent pipelines with scoring. Each example builds on the previous one.
 
 ## Prerequisites
 
@@ -11,8 +15,8 @@ Nine artisan command examples showing how to integrate [Laravel AI](https://lara
 ## Setup
 
 ```bash
-git clone <repo-url>
-cd laravel-langfuse-integration-examples/ai
+git clone git@github.com:axyr/laravel-langfuse-ai-examples.git
+cd laravel-langfuse-ai-examples
 
 # Start Langfuse locally (takes 2-3 minutes on first run)
 docker compose up -d
@@ -31,9 +35,10 @@ php artisan migrate
 
 The `.env.example` comes pre-configured with Langfuse keys that match the `docker-compose.yml` auto-provisioned project. No manual Langfuse setup needed.
 
-**Langfuse UI:** [http://localhost:3000](http://localhost:3000) (login: `admin@example.com` / `password`)
+**Langfuse UI:** http://localhost:3000 (login: `admin@example.com` / `password`)
 
 To stop Langfuse: `docker compose down`
+
 To reset all data: `docker compose down -v`
 
 ## Examples
@@ -50,69 +55,69 @@ To reset all data: `docker compose down -v`
 | 8 | `php artisan example:multi-agent` | Multiple agents sharing a single trace |
 | 9 | `php artisan example:conversation` | Multi-turn conversation with session grouping |
 
-### Example 1: Basic Agent
+### 1. Basic Agent
 
-The simplest integration. Enable `LANGFUSE_LARAVEL_AI_ENABLED=true` in your `.env` and every Laravel AI call is automatically traced. No Langfuse code in your application.
+The simplest integration. Set `LANGFUSE_LARAVEL_AI_ENABLED=true` and every Laravel AI call is automatically traced. No Langfuse code in your application.
 
-**Langfuse result:** Auto-created trace `laravel-ai-Summarizer` with one generation showing model, input, output, and token usage.
+**In Langfuse:** Auto-created trace `laravel-ai-Summarizer` with one generation showing model, input, output, and token usage.
 
-### Example 2: Agent with Tools
+### 2. Agent with Tools
 
 Same auto-tracing, but now the agent has tools. Each tool invocation creates a span inside the trace.
 
-**Langfuse result:** Trace with generation + `tool-SearchWeb` and `tool-Calculator` spans.
+**In Langfuse:** Trace with generation + `tool-SearchWeb` and `tool-Calculator` spans.
 
-### Example 3: Structured Output
+### 3. Structured Output
 
-Agent returns structured JSON via `HasStructuredOutput`. The structured response appears in the Langfuse generation output.
+Agent returns structured JSON via `HasStructuredOutput`. The structured response appears in the generation output.
 
-**Langfuse result:** Generation output shows the structured JSON with sentiment, confidence, key phrases.
+**In Langfuse:** Generation output shows the structured JSON with sentiment, confidence, key phrases.
 
-### Example 4: Streaming
+### 4. Streaming
 
-Streaming works identically with auto-tracing. The complete accumulated text is captured in Langfuse after the stream finishes.
+Streaming works identically with auto-tracing. The complete accumulated text is captured after the stream finishes.
 
-**Langfuse result:** Complete generation with full text.
+**In Langfuse:** Complete generation with full text.
 
-### Example 5: Prompt Management
+### 5. Prompt Management
 
 Create and fetch prompts from Langfuse's prompt management. Compile them with variables and link them to generations.
 
-**Langfuse result:** Prompt in prompt management + trace with linked generation.
+**In Langfuse:** Prompt in prompt management + trace with linked generation.
 
-### Example 6: Scoring
+### 6. Scoring
 
-Attach numeric and categorical quality scores to traces for evaluation dashboards.
+Attach numeric and categorical quality scores to traces. Useful for evaluation dashboards.
 
-**Langfuse result:** Trace with generation + 3 scores (relevance, conciseness, quality).
+**In Langfuse:** Trace with generation + 3 scores (relevance, conciseness, quality).
 
-### Example 7: RAG Pipeline
+### 7. RAG Pipeline
 
 A full Retrieval-Augmented Generation pipeline with nested spans showing each step: embedding, vector search, reranking, context assembly, and answer generation.
 
-**Langfuse result:** Nested trace tree with spans, generations, events, and scores.
+**In Langfuse:** Nested trace tree with spans, generations, events, and scores.
 
-### Example 8: Multi-Agent Pipeline
+### 8. Multi-Agent Pipeline
 
 Two agents (Researcher and Writer) sharing a single trace. `setCurrentTrace()` ensures both agents' auto-traced generations nest under the same parent.
 
-**Langfuse result:** Single trace with research and writing spans, each containing an auto-traced generation.
+**In Langfuse:** Single trace with research and writing spans, each containing an auto-traced generation.
 
-### Example 9: Conversation
+### 9. Conversation
 
-Multi-turn conversation where each turn creates its own trace, all linked by a `sessionId` for Langfuse session grouping.
+Multi-turn conversation where each turn creates its own trace, all linked by a `sessionId`.
 
-**Langfuse result:** 3 traces grouped by session in the Langfuse session view.
+**In Langfuse:** 3 traces grouped by session in the session view.
 
 ## Running Tests
 
 ```bash
-php artisan test --filter=Examples
+vendor/bin/pest
 ```
 
 Tests use `Langfuse::fake()` and `Agent::fake()` to verify behavior without real API calls.
 
 ## Packages
 
-- **[laravel/ai](https://github.com/laravel/ai)** - Laravel's first-party AI SDK
-- **[axyr/laravel-langfuse](https://github.com/axyr/laravel-langfuse)** - Langfuse PHP SDK for Laravel with auto-instrumentation
+- [laravel/ai](https://github.com/laravel/ai) - Laravel's first-party AI SDK
+- [axyr/laravel-langfuse](https://github.com/axyr/laravel-langfuse) - Langfuse PHP SDK for Laravel with auto-instrumentation
