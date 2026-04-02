@@ -8,15 +8,9 @@
         "framework"
     ],
     "license": "MIT",
-    "repositories": [
-        {
-            "type": "path",
-            "url": "../../../laravel/packages/langfuse-php"
-        }
-    ],
     "require": {
         "php": "^8.3",
-        "axyr/laravel-langfuse": "@dev",
+        "axyr/laravel-langfuse": "dev-main",
         "laravel/ai": "^0.4",
         "laravel/framework": "^13.0",
         "laravel/tinker": "^3.0"
@@ -94,6 +88,6 @@
             "php-http/discovery": true
         }
     },
-    "minimum-stability": "stable",
+    "minimum-stability": "dev",
     "prefer-stable": true
 }
