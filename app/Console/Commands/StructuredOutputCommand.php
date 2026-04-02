@@ -40,7 +40,7 @@ class StructuredOutputCommand extends Command
             /** @var StructuredAgentResponse $response */
             $response = $agent->prompt("Analyze the sentiment of this review: {$review}");
 
-            $this->line('  <fg=white>Result: ' . json_encode($response->toArray(), JSON_PRETTY_PRINT) . '</>');
+            $this->line('  <fg=white>Result: ' . json_encode($response->toArray(), JSON_THROW_ON_ERROR | JSON_PRETTY_PRINT) . '</>');
             $this->newLine();
         }
 
