@@ -121,3 +121,7 @@ Tests use `Langfuse::fake()` and `Agent::fake()` to verify behavior without real
 
 - [laravel/ai](https://github.com/laravel/ai) - Laravel's first-party AI SDK
 - [axyr/laravel-langfuse](https://github.com/axyr/laravel-langfuse) - Langfuse PHP SDK for Laravel with auto-instrumentation
+
+## Author
+
+Built by [Martijn van Nieuwenhoven](https://martijnvannieuwenhoven.com) - Laravel developer specializing in AI integrations and observability tooling.
